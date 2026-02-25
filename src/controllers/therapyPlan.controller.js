@@ -1,11 +1,12 @@
 const therapyPlanModel = require("../models/therapyPlan.model.js");
 const sessionModel = require("../models/session.model.js");
+const billModel = require("../models/bill.model.js");
 
 const createTherapyPlan = async (req, res) => {
   try {
     const plan = await therapyPlanModel.create(req.body);
 
-     const sessions = [];
+    const sessions = [];
 
     for (const item of plan.therapies) {
       for (let day = 0; day < item.durationDays; day++) {
@@ -15,12 +16,21 @@ const createTherapyPlan = async (req, res) => {
         sessions.push({
           therapyPlan: plan._id,
           therapy: item.therapy,
-          sessionDate
+          sessionDate,
         });
       }
     }
-
     await sessionModel.insertMany(sessions);
+
+    const totalAmount = plan.therapies.reduce((sum, item) => {
+      return sum + item.durationDays * item.costPerDay;
+    }, 0);
+
+    await billModel.create({
+      therapyPlan: plan._id,
+      patient: plan.patient,
+      totalAmount,
+    });
 
     res.status(201).json({
       success: true,
@@ -36,22 +46,23 @@ const createTherapyPlan = async (req, res) => {
   }
 };
 
-const getTherapyPlans = async (req,res) => {
-    try {
-    const plans = await therapyPlanModel.find()
+const getTherapyPlans = async (req, res) => {
+  try {
+    const plans = await therapyPlanModel
+      .find()
       .populate("patient", "fullName phone")
       .populate("therapies.therapy", "name category");
 
     res.status(200).json({
       success: true,
-      data: plans
+      data: plans,
     });
   } catch (error) {
     console.error("GET PLANS ERROR:", error);
 
     res.status(500).json({
       success: false,
-      message: "Failed to fetch therapy plans"
+      message: "Failed to fetch therapy plans",
     });
   }
 };
@@ -61,13 +72,9 @@ const updatePlanStatus = async (planId) => {
 
   if (sessions.length === 0) return;
 
-  const allCompleted = sessions.every(
-    s => s.status === "completed"
-  );
+  const allCompleted = sessions.every((s) => s.status === "completed");
 
-  const anyScheduled = sessions.some(
-    s => s.status === "scheduled"
-  );
+  const anyScheduled = sessions.some((s) => s.status === "scheduled");
 
   let newStatus = "planned";
 
@@ -75,12 +82,12 @@ const updatePlanStatus = async (planId) => {
   else if (anyScheduled) newStatus = "ongoing";
 
   await therapyPlanModel.findByIdAndUpdate(planId, {
-    status: newStatus
+    status: newStatus,
   });
 };
 
 module.exports = {
-    createTherapyPlan,
-    getTherapyPlans,
-    updatePlanStatus,
-}
+  createTherapyPlan,
+  getTherapyPlans,
+  updatePlanStatus,
+};

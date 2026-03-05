@@ -7,6 +7,7 @@ const sessionRoutes = require("./routes/session.route.js");
 const userRoutes = require("./routes/user.route.js");
 const authRoutes = require("./routes/auth.route.js");
 const billRoutes = require("./routes/bill.route.js");
+const reportRoutes = require("./routes/report.route.js");
 
 app.use(express.json());
 
@@ -21,5 +22,6 @@ app.use("/api/sessions", sessionRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/bills", billRoutes);
+app.use("/api/reports", reportRoutes);
 
 module.exports = app;

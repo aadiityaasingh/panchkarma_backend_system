@@ -1,51 +1,40 @@
 const therapyModel = require("../models/therapy.model.js");
+const asyncHandler = require("../utils/asyncHandler.js");
+const AppError = require("../utils/AppError.js");
 
-const createTherapy = async (req, res) => {
+const createTherapy = asyncHandler(async (req, res) => {
+
   try {
     const therapy = await therapyModel.create(req.body);
 
-    return res.status(201).json({
+    res.status(201).json({
       success: true,
       data: therapy
     });
+
   } catch (error) {
-    // Duplicate krta hai key error ko
+
     if (error.code === 11000) {
-      return res.status(400).json({
-        success: false,
-        message: "Therapy already exists"
-      });
+      throw new AppError("Therapy already exists", 400);
     }
 
-    console.error("CREATE THERAPY ERROR:", error);
-
-    return res.status(500).json({
-      success: false,
-      message: "Failed to create therapy"
-    });
+    throw error;
   }
-};
 
-const getTherapies = async (req, res) => {
-  try {
-    const therapies = await therapyModel.find({ isActive: true }).sort({
-      createdAt: -1
-    });
+});
 
-    return res.status(200).json({
-      success: true,
-      data: therapies
-    });
-  } catch (error) {
-    console.error("GET THERAPIES ERROR:", error);
+const getTherapies = asyncHandler(async (req, res) => {
 
-    return res.status(500).json({
-      success: false,
-      message: "Failed to fetch therapies"
-    });
-  }
-};
+  const therapies = await therapyModel
+    .find({ isActive: true })
+    .sort({ createdAt: -1 });
 
+  res.status(200).json({
+    success: true,
+    data: therapies
+  });
+
+});
 
 module.exports = {
   createTherapy,

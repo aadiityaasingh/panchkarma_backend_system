@@ -1,9 +1,13 @@
 const userModel = require("../models/user.model.js");
 const bcrypt = require("bcrypt");
+const asyncHandler = require("../utils/asyncHandler.js");
+const AppError = require("../utils/AppError.js");
 
-const createUser = async(req,res) => {
-    try {
-    const { fullName, email, password, role } = req.body;
+const createUser = asyncHandler(async (req, res) => {
+
+  const { fullName, email, password, role } = req.body;
+
+  try {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -23,21 +27,18 @@ const createUser = async(req,res) => {
         role: user.role
       }
     });
+
   } catch (error) {
+
     if (error.code === 11000) {
-      return res.status(400).json({
-        success: false,
-        message: "User already exists"
-      });
+      throw new AppError("User already exists", 400);
     }
 
-    res.status(500).json({
-      success: false,
-      message: "Failed to create user"
-    });
+    throw error;
   }
-}
+
+});
 
 module.exports = {
-    createUser,
-}
+  createUser,
+};

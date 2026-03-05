@@ -1,68 +1,54 @@
 const billModel = require("../models/bill.model.js");
+const asyncHandler = require("../utils/asyncHandler.js");
+const AppError = require("../utils/AppError.js");
 
-const getBillByPlan = async (req,res) => {
-    try {
-    const bill = await billModel.findOne({
-      therapyPlan: req.params.planId
-    }).populate("patient", "fullName phone");
+const getBillByPlan = asyncHandler(async (req, res) => {
 
-    if (!bill) {
-      return res.status(404).json({
-        success: false,
-        message: "Bill not found"
-      });
-    }
+  const bill = await billModel
+    .findOne({ therapyPlan: req.params.planId })
+    .populate("patient", "fullName phone");
 
-    res.status(200).json({
-      success: true,
-      data: bill
-    });
-  } catch (error) {
-    console.error("GET BILL ERROR:", error);
-    res.status(500).json({
-      success: false,
-      message: "Failed to fetch bill"
-    });
+  if (!bill) {
+    throw new AppError("Bill not found", 404);
   }
-};
 
-const addPayment = async(req,res) => {
-    try {
-    const { amount } = req.body;
+  res.status(200).json({
+    success: true,
+    data: bill
+  });
 
-    const bill = await billModel.findById(req.params.billId);
-    if (!bill) {
-      return res.status(404).json({
-        success: false,
-        message: "Bill not found"
-      });
-    }
+});
 
-    bill.paidAmount += amount;
 
-    if (bill.paidAmount >= bill.totalAmount) {
-      bill.status = "paid";
-      bill.paidAmount = bill.totalAmount;
-    } else {
-      bill.status = "partial";
-    }
+const addPayment = asyncHandler(async (req, res) => {
 
-    await bill.save();
+  const { amount } = req.body;
 
-    res.status(200).json({
-      success: true,
-      data: bill
-    });
-  } catch (error) {
-    console.error("ADD PAYMENT ERROR:", error);
-    res.status(500).json({
-      success: false,
-      message: "Failed to add payment"
-    });
+  const bill = await billModel.findById(req.params.billId);
+
+  if (!bill) {
+    throw new AppError("Bill not found", 404);
   }
-};
+
+  bill.paidAmount += amount;
+
+  if (bill.paidAmount >= bill.totalAmount) {
+    bill.status = "paid";
+    bill.paidAmount = bill.totalAmount;
+  } else {
+    bill.status = "partial";
+  }
+
+  await bill.save();
+
+  res.status(200).json({
+    success: true,
+    data: bill
+  });
+
+});
 
 module.exports = {
-    getBillByPlan,
-    addPayment,
-}
+  getBillByPlan,
+  addPayment,
+};

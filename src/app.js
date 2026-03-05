@@ -8,6 +8,9 @@ const userRoutes = require("./routes/user.route.js");
 const authRoutes = require("./routes/auth.route.js");
 const billRoutes = require("./routes/bill.route.js");
 const reportRoutes = require("./routes/report.route.js");
+const errorHandler = require("./middlewares/errorHandler.js");
+const swaggerUi = require("swagger-ui-express")
+const swaggerSpec = require("./config/swagger.js");
 
 app.use(express.json());
 
@@ -23,5 +26,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/bills", billRoutes);
 app.use("/api/reports", reportRoutes);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));;
+app.use(errorHandler);
 
 module.exports = app;

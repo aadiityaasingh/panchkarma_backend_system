@@ -56,3 +56,11 @@ Backend: Node.js, Express
 Database: MongoDB, Mongoose
 Authentication: JSON Web Token, bcrypt
 Documentation: Swagger UI
+
+# Future Improvements:-
+Therapist assignment to sessions
+Appointment booking system
+Inventory management for medicines
+File uploads for patient reports
+Dashboard analytics
+Notifications & reminders

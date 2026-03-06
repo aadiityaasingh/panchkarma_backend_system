@@ -14,9 +14,12 @@ const swaggerSpec = require("./config/swagger.js");
 
 app.use(express.json());
 
-app.get("/", (req,res) => {
-    res.send("this is working app");
-})
+app.get("/", (req, res) => {
+  res.json({
+    message: "Panchakarma Management API is running",
+    documentation: "https://panchakarma-backend-system.onrender.com/api-docs"
+  });
+});
 
 app.use("/api/patients", patientRoutes);
 app.use("/api/therapies", therapyRoutes);

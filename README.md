@@ -1,5 +1,7 @@
 # Panchakarma Management System (Backend)
 
+API check = https://panchakarma-backend-system.onrender.com/api-docs/
+
 A backend API for managing a Panchakarma therapy clinic.
 The system handles patients, therapies, therapy plans, session tracking, billing, and analytics.
 

@@ -8,11 +8,18 @@ const options = {
       version: "1.0.0",
       description: "Backend API documentation for Panchakarma Management System"
     },
+
     servers: [
       {
-        url: "https://panchakarma-backend-system.onrender.com"
+        url: "http://localhost:3000",
+        description: "Local server"
+      },
+      {
+        url: "https://panchakarma-backend-system.onrender.com",
+        description: "Production server"
       }
     ],
+
     components: {
       securitySchemes: {
         bearerAuth: {
@@ -29,10 +36,10 @@ const options = {
       }
     ]
   },
+
   apis: [
-    "src/routes/*.js",
-    "src/controllers/*.js",
-    "src/app.js"
+    "./src/routes/*.js",
+    "./src/controllers/*.js"
   ]
 };
 

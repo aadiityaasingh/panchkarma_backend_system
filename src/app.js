@@ -20,6 +20,9 @@ app.get("/", (req, res) => {
     documentation: "https://panchakarma-backend-system.onrender.com/api-docs"
   });
 });
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
 
 app.use("/api/patients", patientRoutes);
 app.use("/api/therapies", therapyRoutes);

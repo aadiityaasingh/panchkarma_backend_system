@@ -11,10 +11,6 @@ const options = {
 
     servers: [
       {
-        url: "http://localhost:3000",
-        description: "Local server"
-      },
-      {
         url: "https://panchakarma-backend-system.onrender.com",
         description: "Production server"
       }

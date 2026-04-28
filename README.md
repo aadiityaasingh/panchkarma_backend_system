@@ -120,6 +120,7 @@ touch .env
 npm start          # production
 npm run dev        # development with nodemon
 
+```
 
 ### Environment Variables
 

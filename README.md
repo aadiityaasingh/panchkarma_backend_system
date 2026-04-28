@@ -38,6 +38,9 @@ A clean, production-ready RESTful API for managing Panchkarma (Ayurvedic) wellne
 
 ## 📁 Project Structure
 
+## 📁 Project Structure
+
+```
 panchkarma_backend_system/
 ├── src/
 │   ├── config/
@@ -84,6 +87,8 @@ panchkarma_backend_system/
 ├── .gitignore
 ├── package.json
 └── server.js                       # Entry point
+```
+
 
 
 ---------------------------------------------------------------------------------------------------------------------------------------

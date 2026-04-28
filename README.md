@@ -7,20 +7,21 @@ A clean, production-ready RESTful API for managing Panchkarma (Ayurvedic) wellne
 
 
 
+
 ## 🛠 Tech Stack
 
-| Layer             | Technology          |
-|-----------------------------------------|
-| Runtime           | Node.js             |
-| Framework         | Express.js v5       |
-| Database          | MongoDB + Mongoose  |
-| Authentication    | JWT (Bearer Token)  |
-| Password Hashing  | bcrypt              |
-| Validation        | express-validator   |
-| API Docs          | Swagger UI          |
-| Deployment        | Render              |
+| Layer            | Technology         |
+| ---------------- | ------------------ |
+| Runtime          | Node.js            |
+| Framework        | Express.js v5      |
+| Database         | MongoDB + Mongoose |
+| Authentication   | JWT (Bearer Token) |
+| Password Hashing | bcrypt             |
+| Validation       | express-validator  |
+| API Docs         | Swagger UI         |
+| Deployment       | Render             |
 
----
+
 
 ## ✨ Features
 
